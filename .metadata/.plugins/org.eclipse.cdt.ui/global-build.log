@@ -1,0 +1,27 @@
+18:03:32 **** Incremental Build of configuration Debug for project Breakbricks ****
+make -j14 all 
+arm-none-eabi-gcc "../app/breakbricks.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G431xx -c -I../core/Inc -I../../common/core/Inc -I../drivers/stm32g4xx_hal/Inc -I../../common/drivers/stm32g4xx_hal/Inc -I../drivers/stm32g4xx_hal/Inc/Legacy -I../../common/drivers/stm32g4xx_hal/Inc/Legacy -I../drivers/cmsis/Device/ST/STM32G4xx/Include -I../../common/drivers/cmsis/Device/ST/STM32G4xx/Include -I../drivers/cmsis/Include -I../../common/drivers/cmsis/Include -I../app -I../drivers/bsp -I../../common/drivers/bsp -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"app/breakbricks.d" -MT"app/breakbricks.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "app/breakbricks.o"
+../app/breakbricks.c:84:13: warning: 'BREAKBRICKS_racket_update' defined but not used [-Wunused-function]
+   84 | static void BREAKBRICKS_racket_update(bool button_left, bool button_right)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../app/breakbricks.c:78:13: warning: 'BREAKBRICKS_process_ms' defined but not used [-Wunused-function]
+   78 | static void BREAKBRICKS_process_ms(void)
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "Breakbricks.elf" @"objects.list"  -lc -lrdimon -mcpu=cortex-m4 -T"C:\Users\hassa\STM32CubeIDE\workspace_stm32\Breakbricks\core\STM32G431KBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Breakbricks.map" -Wl,--gc-sections -static -u_printf_float -specs=rdimon.specs --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Breakbricks.elf
+ 
+arm-none-eabi-size  Breakbricks.elf 
+arm-none-eabi-objdump -h -S Breakbricks.elf  > "Breakbricks.list"
+   text	   data	    bss	    dec	    hex	filename
+  44100	    476	   3524	  48100	   bbe4	Breakbricks.elf
+Finished building: default.size.stdout
+ 
+Finished building: Breakbricks.list
+ 
+18:04:05 **** Incremental Build of configuration Debug for project Breakbricks ****
+make -j14 all 
+arm-none-eabi-size  Breakbricks.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44100	    476	   3524	  48100	   bbe4	Breakbricks.elf
+Finished building: default.size.stdout
+ 

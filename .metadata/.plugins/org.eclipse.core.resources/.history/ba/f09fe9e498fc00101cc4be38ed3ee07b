@@ -1,0 +1,80 @@
+/*
+ * breakbricks.c
+ *
+ *  Created on: Feb 12, 2024
+ *      Author: Nirgal
+ */
+#include "config.h"
+#include "breakbricks.h"
+#include "button.h"
+#include "display.h"
+#include "stdbool.h"
+#include "stm32g4_systick.h"
+#include "stm32g4_utils.h"
+
+//Définitions de macros (constantes)
+
+
+
+//Variables (privées, car elles doivent toutes être privées)
+
+
+
+
+//Protypes de fonctions privées
+static void BREAKBRICKS_process_ms(void);
+static void BREAKBRICKS_racket_update(bool button_left, bool button_right);
+static void BREAKBRICKS_ball_update(bool button_center);
+static void BREAKBRICKS_check_collision(void);
+
+
+//Fonctions publiques
+
+void BREAKBRICKS_init(void)
+{
+	BUTTONS_init();
+
+}
+
+
+void BREAKBRICKS_process_main(void)
+{
+	    bool button_left   = BUTTON_left_read();
+	    bool button_right  = BUTTON_right_read();
+	    bool button_center = BUTTON_center_read();
+	    if(button_left)
+	       {
+	           HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, GPIO_PIN_SET);
+	       }
+	       else if(button_right)
+	       {
+	           HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, GPIO_PIN_RESET);
+	       }
+
+}
+
+
+//Fonctions privées
+
+static void BREAKBRICKS_process_ms(void)
+{
+
+}
+
+
+static void BREAKBRICKS_racket_update(bool button_left, bool button_right)
+{
+
+}
+
+static void BREAKBRICKS_ball_update(bool button_center)
+{
+
+}
+
+
+static void BREAKBRICKS_check_collision(void)
+{
+
+}
+

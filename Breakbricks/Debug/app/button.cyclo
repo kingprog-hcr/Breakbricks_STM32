@@ -1,0 +1,8 @@
+../app/button.c:31:6:BUTTONS_init	1
+../app/button.c:43:6:BUTTONS_process_ms	2
+../app/button.c:49:6:BUTTON_left_read	1
+../app/button.c:54:6:BUTTON_right_read	1
+../app/button.c:59:6:BUTTON_up_read	1
+../app/button.c:64:6:BUTTON_down_read	1
+../app/button.c:69:6:BUTTON_center_read	1
+../app/button.c:74:6:BUTTONS_update	12
