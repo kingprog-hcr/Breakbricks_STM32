@@ -1,10 +1,10 @@
-18:04:05 **** Incremental Build of configuration Debug for project Breakbricks ****
+22:30:08 **** Incremental Build of configuration Debug for project Breakbricks ****
 make -j14 all 
 arm-none-eabi-size  Breakbricks.elf 
    text	   data	    bss	    dec	    hex	filename
-  44100	    476	   3524	  48100	   bbe4	Breakbricks.elf
+  47100	    476	   3820	  51396	   c8c4	Breakbricks.elf
 Finished building: default.size.stdout
  
 
-18:04:06 Build Finished. 0 errors, 0 warnings. (took 1s.5ms)
+22:30:09 Build Finished. 0 errors, 0 warnings. (took 1s.2ms)
 

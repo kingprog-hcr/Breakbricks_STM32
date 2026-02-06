@@ -1,2 +1,4 @@
 ../app/display.c:44:6:DISPLAY_init	8	static
 ../app/display.c:51:6:DISPLAY_refresh_ball	24	static
+../app/display.c:70:6:DISPLAY_refresh_racket	40	static
+../app/display.c:109:6:DISPLAY_refresh_grid	48	static
