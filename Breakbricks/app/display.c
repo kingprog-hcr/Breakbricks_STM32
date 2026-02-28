@@ -35,7 +35,8 @@ static const uint16_t grid_colors[BRICKSTYLE_NB] = {
 
 
 //Prototype des fonctions privées
-static char style2char(uint8_t style);
+static char style2char(brickstyle_e style);
+
 
 //_____________________________________
 
@@ -112,13 +113,14 @@ void DISPLAY_refresh_grid(grid_t * grid)
 
     for (uint8_t b = 0; b < NB_MAX_BRICKS; b++)
     {
+    	// On assigne les coordonnes de la brick pour plus de facilite
+    	uint16_t x1 = grid->bricks[b].x1;
+    	uint16_t x2 = grid->bricks[b].x2;
+    	uint16_t y1 = ILI9341_WIDTH - grid->bricks[b].y2;
+    	uint16_t y2 = ILI9341_WIDTH - grid->bricks[b].y1;
+
         if (grid->bricks[b].style != displayed_bricks[b])
         {
-            uint16_t x1 = grid->bricks[b].x1;
-            uint16_t x2 = grid->bricks[b].x2;
-            uint16_t y1 = ILI9341_WIDTH - grid->bricks[b].y2;
-            uint16_t y2 = ILI9341_WIDTH - grid->bricks[b].y1;
-
             ILI9341_DrawFilledRectangle(
                 x1, y1, x2, y2,
                 grid_colors[grid->bricks[b].style]
@@ -130,12 +132,53 @@ void DISPLAY_refresh_grid(grid_t * grid)
                     ? ILI9341_COLOR_BLACK
                     : ILI9341_COLOR_WHITE
             );
+            if (grid->bricks[b].style > BRICKSTYLE_FULL){ // on souhaite dessiner un caractere au centre de la brick
+                    	// coordonnes du centre du caractere
+
+				uint16_t char_x = (x1 + (x2-x1)/2 - Font_11x18.FontWidth/2);
+				uint16_t char_y = (y1 + (y2-y1)/2 - Font_11x18.FontHeight/2) ;
+				// on dessine le fond de lettre
+
+				ILI9341_Putc(
+					char_x,
+					char_y,
+					style2char(grid->bricks[b].style),  // lettre correspondant au style
+					&Font_11x18,
+					ILI9341_COLOR_WHITE,                 // texte blanc
+					grid_colors[grid->bricks[b].style]   // fond = couleur de la brique
+				);
+
+			}
 
             displayed_bricks[b] = grid->bricks[b].style;
         }
-    }
+
+            }
 
 
+}
 
+static char style2char(brickstyle_e style){
+	switch(style){
+		case BRICKSTYLE_BOMB :
+			return 'B';
 
+		case BRICKSTYLE_JOKER:
+			return 'J';
+
+		case BRICKSTYLE_RESIZER:
+			return 'R';
+
+		case BRICKSTYLE_GLUE :
+			return 'G' ;
+
+		case BRICKSTYLE_ROCK :
+			return 'X' ;
+
+		case BRICKSTYLE_LIFE :
+			return 'L';
+
+		default :
+			return ' ';
+	}
 }

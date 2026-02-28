@@ -46,9 +46,6 @@ static void BREAKBRICKS_breaks(uint8_t b);
 
 void BREAKBRICKS_init(void)
 {
-	BUTTONS_init();
-	DISPLAY_init();
-	BSP_systick_add_callback_function(&BREAKBRICKS_process_ms);
 
 	// on initialise les caracteristiques de la ball
 	ball.size = 10;
@@ -70,7 +67,6 @@ void BREAKBRICKS_init(void)
 	racket.speed = 0;
 
 	life = 3;
-
 	// Remplissage de la grille de brique
 
 	grid.nb_bricks_remaining = 0;
@@ -93,6 +89,22 @@ void BREAKBRICKS_init(void)
 	    }
 	}
 
+		// on definit une brick par style
+
+		grid.bricks[0].style = BRICKSTYLE_BOMB;
+		grid.bricks[1].style = BRICKSTYLE_ROCK;
+		grid.bricks[2].style = BRICKSTYLE_JOKER;
+		grid.bricks[3].style = BRICKSTYLE_RESIZER;
+		grid.bricks[4].style = BRICKSTYLE_GLUE;
+		grid.bricks[5].style = BRICKSTYLE_LIFE;
+		grid.bricks[23].style = BRICKSTYLE_LIFE;
+		grid.bricks[9].style = BRICKSTYLE_RESIZER;
+		grid.bricks[15].style = BRICKSTYLE_RESIZER;
+		grid.bricks[21].style = BRICKSTYLE_RESIZER;
+
+		BUTTONS_init();
+		DISPLAY_init();
+		BSP_systick_add_callback_function(&BREAKBRICKS_process_ms);
 
 }
 
@@ -124,6 +136,10 @@ void BREAKBRICKS_process_main(void)
     DISPLAY_refresh_grid(&grid);
 
     }
+    if(life == 0 || grid.nb_bricks_remaining ==0){
+    		while(1);
+    	}
+
 }
 
 
@@ -139,9 +155,6 @@ static void BREAKBRICKS_process_ms(void)
 	else{
 		t = 0 ;
 		flag_refresh = TRUE;
-	}
-	if(life == 0 || grid.nb_bricks_remaining ==0){
-		while(1);
 	}
 
 }
@@ -212,12 +225,7 @@ static void BREAKBRICKS_check_collision(void)
 	if ((ball.x - ball.size / 2 <= 0) || (ball.x + ball.size / 2 >= SCREEN_WIDTH - 1)){
 	ball.speed_x = -ball.speed_x;
 	}
-	//Contact avec le sol
-	if(ball.y - ball.size / 2 <= 0){
-	ball.speed_x = 0;
-	ball.speed_y = 0;
-	life--;
-	}
+
 
 	//Contact avec la raquette
 	 if ( ball.y - ball.size / 2 < racket.y + racket.height / 2 + 1
@@ -251,11 +259,50 @@ static void BREAKBRICKS_check_collision(void)
 
 	 }
 	   }
+	 //Contact avec le sol
+	 	if(ball.y - ball.size / 2 <= 0){
+	 	ball.speed_x = 0;
+	 	ball.speed_y = 0;
+	 	life--;
+	 	}
 }
 
 
 static void BREAKBRICKS_breaks(uint8_t b){
 	if (grid.bricks[b].style != BRICKSTYLE_NONE){
+
+		switch(grid.bricks[b].style){
+		case BRICKSTYLE_FULL:
+
+			break;
+		case BRICKSTYLE_ROCK:
+			// return;
+			break;
+		case BRICKSTYLE_BOMB:
+
+			break;
+		case BRICKSTYLE_RESIZER:
+			racket.width = (racket.width == 50 ? 100: 50);
+
+			break;
+		case BRICKSTYLE_JOKER:
+
+			break;
+		case BRICKSTYLE_GLUE:
+
+			break;
+		case BRICKSTYLE_LIFE:
+			life ++;
+
+			break;
+		case BRICKSTYLE_NB:
+
+			break;
+
+		default:
+			break;
+		}
+
 		grid.bricks[b].style = BRICKSTYLE_NONE;
 		grid.nb_bricks_remaining--;
 }

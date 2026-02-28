@@ -1,7 +1,7 @@
 ../app/breakbricks.c:47:6:BREAKBRICKS_init	3
-../app/breakbricks.c:100:6:BREAKBRICKS_process_main	4
-../app/breakbricks.c:133:13:BREAKBRICKS_process_ms	4
-../app/breakbricks.c:150:13:BREAKBRICKS_racket_update	5
-../app/breakbricks.c:170:13:BREAKBRICKS_ball_update	8
-../app/breakbricks.c:205:13:BREAKBRICKS_check_collision	18
-../app/breakbricks.c:257:13:BREAKBRICKS_breaks	2
+../app/breakbricks.c:112:6:BREAKBRICKS_process_main	6
+../app/breakbricks.c:149:13:BREAKBRICKS_process_ms	2
+../app/breakbricks.c:163:13:BREAKBRICKS_racket_update	5
+../app/breakbricks.c:183:13:BREAKBRICKS_ball_update	8
+../app/breakbricks.c:218:13:BREAKBRICKS_check_collision	18
+../app/breakbricks.c:271:13:BREAKBRICKS_breaks	5

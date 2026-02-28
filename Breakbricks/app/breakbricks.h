@@ -23,6 +23,8 @@
 #define BRICK_HEIGHT_DEFAULT (32)
 
 
+
+
 typedef enum {
 BALL_OPTION_NONE,
 BALL_OPTION_GLUE ,
