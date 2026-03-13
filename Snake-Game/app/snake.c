@@ -20,6 +20,8 @@ static snake_t snake;
 static segment_t apple;
 static uint32_t last_move_tick = 0;
 
+int16_t score = 0;
+
 
 // Prototypes prives
 

@@ -205,8 +205,11 @@ void DISPLAY_game_over(void){
 	int16_t center_x = (SCREEN_WIDTH / 2);
 	int16_t center_y = (SCREEN_HEIGHT / 2);
 	char text[10] = "GAME OVER";
-	int8_t i;
+
+	int8_t i = 0;
+
 	while(text[i] != '\0'){
+
 	ILI9341_Putc(
 				center_x - (4 - i) * SEG_SIZE,
 				center_y,
