@@ -19,6 +19,7 @@ void DISPLAY_refresh_grid(grid_t * grid);
 
 void DISPLAY_refresh_snake(snake_t *snake);
 void DISPLAY_refresh_apple(segment_t *apple);
+void DISPLAY_game_over(void);
 
 
 

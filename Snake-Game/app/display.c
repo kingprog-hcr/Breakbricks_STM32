@@ -108,82 +108,6 @@ void DISPLAY_refresh_racket(racket_t *racket)
 
 }
 
-void DISPLAY_refresh_grid(grid_t * grid)
-{
-    static brickstyle_e displayed_bricks[NB_MAX_BRICKS] = {BRICKSTYLE_NONE};
-
-    for (uint8_t b = 0; b < NB_MAX_BRICKS; b++)
-    {
-    	// On assigne les coordonnes de la brick pour plus de facilite
-
-    	uint16_t x1 = grid->bricks[b].x1;
-    	uint16_t x2 = grid->bricks[b].x2;
-    	uint16_t y1 = ILI9341_WIDTH - grid->bricks[b].y2;
-    	uint16_t y2 = ILI9341_WIDTH - grid->bricks[b].y1;
-
-        if (grid->bricks[b].style != displayed_bricks[b])
-        {
-            ILI9341_DrawFilledRectangle(
-                x1, y1, x2, y2,
-                grid_colors[grid->bricks[b].style]
-            );
-
-            ILI9341_DrawRectangle(
-                x1, y1, x2, y2,
-                (grid->bricks[b].style != BRICKSTYLE_NONE)
-                    ? ILI9341_COLOR_BLACK
-                    : ILI9341_COLOR_WHITE
-            );
-            if (grid->bricks[b].style > BRICKSTYLE_FULL){ // on souhaite dessiner un caractere au centre de la brick
-                    	// coordonnes du centre du caractere
-
-				uint16_t char_x = (x1 + (x2-x1)/2 - Font_11x18.FontWidth/2);
-				uint16_t char_y = (y1 + (y2-y1)/2 - Font_11x18.FontHeight/2) ;
-				// on dessine le fond de lettre
-
-				ILI9341_Putc(
-					char_x,
-					char_y,
-					style2char(grid->bricks[b].style),  // lettre correspondant au style
-					&Font_11x18,
-					ILI9341_COLOR_WHITE,                 // texte blanc
-					grid_colors[grid->bricks[b].style]   // fond = couleur de la brique
-				);
-
-			}
-
-            displayed_bricks[b] = grid->bricks[b].style;
-        }
-
-            }
-
-
-}
-
-static char style2char(brickstyle_e style){
-	switch(style){
-		case BRICKSTYLE_BOMB :
-			return 'B';
-
-		case BRICKSTYLE_JOKER:
-			return 'J';
-
-		case BRICKSTYLE_RESIZER:
-			return 'R';
-
-		case BRICKSTYLE_GLUE :
-			return 'G' ;
-
-		case BRICKSTYLE_ROCK :
-			return 'X' ;
-
-		case BRICKSTYLE_LIFE :
-			return 'L';
-
-		default :
-			return ' ';
-	}
-}
 
 
 void DISPLAY_refresh_snake(snake_t *snake)
@@ -192,7 +116,7 @@ void DISPLAY_refresh_snake(snake_t *snake)
     static bool initialized = false;
 
 
-    // Effacement ancien serpent
+
 
 
 
@@ -211,6 +135,7 @@ void DISPLAY_refresh_snake(snake_t *snake)
                 }
             }
 
+    // Effacement ancien serpent
 
     for (int8_t i = 0; i < snake->length; i++)
     {
@@ -233,38 +158,63 @@ void DISPLAY_refresh_snake(snake_t *snake)
     displayed_snake = *snake;
     initialized = true;
 }
-
 void DISPLAY_refresh_apple(segment_t *apple)
 {
     int16_t center_x = (apple->x1 + apple->x2)/2;
     int16_t center_y = ILI9341_WIDTH - ((apple->y1 + apple->y2)/2);
+    static segment_t displayed_apple;
 
-    // pomme
-    ILI9341_DrawFilledCircle(center_x, center_y, SEG_SIZE/2, ILI9341_COLOR_RED);
-    ILI9341_DrawCircle(center_x, center_y, SEG_SIZE/2, ILI9341_COLOR_BLACK);
+    if (displayed_apple.x1 != apple->x1 || displayed_apple.y1 != apple->y1){
 
-    // effet brillant (reflet de lumière)
-    ILI9341_DrawFilledCircle(
-        center_x - SEG_SIZE/4,
-        center_y - SEG_SIZE/4,
-        SEG_SIZE/6,
-        ILI9341_COLOR_WHITE
-    );
+        // pomme
+        ILI9341_DrawFilledCircle(center_x, center_y, SEG_SIZE/2, ILI9341_COLOR_RED);
+        ILI9341_DrawCircle(center_x, center_y, SEG_SIZE/2, ILI9341_COLOR_BLACK);
 
-    // tige
-    ILI9341_DrawFilledRectangle(
-        center_x - 1,
-        center_y - SEG_SIZE/2 - 4,
-        center_x + 1,
-        center_y - SEG_SIZE/2,
-        ILI9341_COLOR_BROWN
-    );
+        // reflet
+        ILI9341_DrawFilledCircle(
+            center_x - SEG_SIZE/4,
+            center_y - SEG_SIZE/4,
+            SEG_SIZE/6,
+            ILI9341_COLOR_WHITE
+        );
 
-    // feuille
-    ILI9341_DrawFilledCircle(
-        center_x + 4,
-        center_y - SEG_SIZE/2 - 2,
-        2,
-        ILI9341_COLOR_GREEN
-    );
+        // tige (reste dans le carré de la pomme)
+        ILI9341_DrawFilledRectangle(
+            center_x - 1,
+            center_y - SEG_SIZE/2,
+            center_x + 1,
+            center_y - SEG_SIZE/2 + 4,
+            ILI9341_COLOR_BROWN
+        );
+
+        // feuille (collée à la tige mais dans la case)
+        ILI9341_DrawFilledCircle(
+            center_x + 3,
+            center_y - SEG_SIZE/2 + 2,
+            2,
+            ILI9341_COLOR_GREEN
+        );
+
+        displayed_apple = *apple;
+    }
+}
+
+
+void DISPLAY_game_over(void){
+
+	int16_t center_x = (SCREEN_WIDTH / 2);
+	int16_t center_y = (SCREEN_HEIGHT / 2);
+	char text[10] = "GAME OVER";
+	int8_t i;
+	while(text[i] != '\0'){
+	ILI9341_Putc(
+				center_x - (4 - i) * SEG_SIZE,
+				center_y,
+				text[i] ,  // texte
+				&Font_11x18,
+				ILI9341_COLOR_RED,                 // texte rouge
+				ILI9341_COLOR_WHITE // fond
+					);
+	i ++;
+	}
 }
