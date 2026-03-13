@@ -21,6 +21,8 @@ void DISPLAY_refresh_snake(snake_t *snake);
 void DISPLAY_refresh_apple(segment_t *apple);
 void DISPLAY_game_over(void);
 
+void DISPLAY_string(char *text, uint16_t color_text, uint16_t color_bg, int16_t x, int16_t y);
+
 
 
 

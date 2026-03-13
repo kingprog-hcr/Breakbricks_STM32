@@ -221,3 +221,26 @@ void DISPLAY_game_over(void){
 	i ++;
 	}
 }
+
+void DISPLAY_string(char *text,
+                    uint16_t color_text,
+                    uint16_t color_bg,
+                    int16_t x,
+                    int16_t y)
+{
+    int8_t i = 0;
+
+    while(text[i] != '\0')
+    {
+        ILI9341_Putc(
+            x + i * SEG_SIZE,   // décalage horizontal
+            y,
+            text[i],            // caractère à afficher
+            &Font_11x18,
+            color_text,         // couleur du texte
+            color_bg            // couleur du fond
+        );
+
+        i++;
+    }
+}

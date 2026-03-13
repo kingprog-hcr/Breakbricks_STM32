@@ -13,6 +13,7 @@
 #include "stm32g4_systick.h"
 #include "stm32g4_utils.h"
 #include <stdlib.h>
+#include "TFT_ili9341/stm32g4_ili9341.h"
 
 // Variables privees
 
@@ -191,6 +192,7 @@ static void SNAKE_grow_up(void){
 
 	 if (snake.body[0].x1 == apple.x1 && snake.body[0].y1 == apple.y1){
 		 snake.length += 1;
+		 score++;
 		 Generate_random_apple();
 	 }
 }
@@ -218,7 +220,25 @@ static void SNAKE_check_collisin(void){
 
 
 
-static SNAKE_game_over(void){
-	DISPLAY_game_over();
+static void SNAKE_game_over(void){
+
+	int16_t center_x = SCREEN_WIDTH / 2;
+	int16_t center_y = SCREEN_HEIGHT / 2;
+
+	DISPLAY_string("GAME OVER",
+	               ILI9341_COLOR_RED,
+	               ILI9341_COLOR_WHITE,
+	               center_x - 4 * SEG_SIZE,
+	               center_y);
+
+	char score_str[10];
+	char text[20];
+
+	itoa(score, score_str, 10);       // convertit 1243 en "1243"
+	sprintf(text, "SCORE : %s", score_str);  // concatene "SCORE : " + "1243"
+
+
+	DISPLAY_string(&text, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE, center_x - (strlen(text)/2) * SEG_SIZE, center_y + 2*SEG_SIZE);
+
 	while(1);
 }
