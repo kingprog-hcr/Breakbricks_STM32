@@ -120,22 +120,17 @@ void DISPLAY_refresh_snake(snake_t *snake)
 
 
 
+    // Effacement ancien serpent(On efface jsute l'ancien segment du serpent)
+
+    int16_t x1 = displayed_snake.body[displayed_snake.length-1].x1;
+    int16_t x2 = displayed_snake.body[displayed_snake.length-1].x2;
+    int16_t y1 = ILI9341_WIDTH - displayed_snake.body[displayed_snake.length-1].y2;
+    int16_t y2 = ILI9341_WIDTH - displayed_snake.body[displayed_snake.length-1].y1;
+
+    ILI9341_DrawFilledRectangle(x1, y1, x2, y2, ILI9341_COLOR_WHITE);
+
 
     // Dessin nouveau serpent
-    if (initialized)
-            {
-                for (int8_t i = 0; i < displayed_snake.length; i++)
-                {
-                    int16_t x1 = displayed_snake.body[i].x1;
-                    int16_t x2 = displayed_snake.body[i].x2;
-                    int16_t y1 = ILI9341_WIDTH - displayed_snake.body[i].y2;
-                    int16_t y2 = ILI9341_WIDTH - displayed_snake.body[i].y1;
-
-                    ILI9341_DrawFilledRectangle(x1, y1, x2, y2, ILI9341_COLOR_WHITE);
-                }
-            }
-
-    // Effacement ancien serpent
 
     for (int8_t i = 0; i < snake->length; i++)
     {
@@ -200,33 +195,18 @@ void DISPLAY_refresh_apple(segment_t *apple)
 }
 
 
-void DISPLAY_game_over(void){
-
-	int16_t center_x = (SCREEN_WIDTH / 2);
-	int16_t center_y = (SCREEN_HEIGHT / 2);
-	char text[10] = "GAME OVER";
-
-	int8_t i = 0;
-
-	while(text[i] != '\0'){
-
-	ILI9341_Putc(
-				center_x - (4 - i) * SEG_SIZE,
-				center_y,
-				text[i] ,  // texte
-				&Font_11x18,
-				ILI9341_COLOR_RED,                 // texte rouge
-				ILI9341_COLOR_WHITE // fond
-					);
-	i ++;
-	}
-}
-
 void DISPLAY_string(char *text,
                     uint16_t color_text,
                     uint16_t color_bg,
                     int16_t x,
                     int16_t y)
+
+	// Affiche un texte à l'écran avec une couleur et une position données
+	// text : chaîne de caractères à afficher
+	// color_text : couleur du texte
+	// color_bg : couleur du fond
+	// x, y : coordonnées sur l'écran
+
 {
     int8_t i = 0;
 
