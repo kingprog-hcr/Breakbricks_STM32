@@ -21,6 +21,8 @@ static snake_t snake;
 static segment_t apple;
 static uint32_t last_move_tick = 0;
 static int16_t score = 0;
+static int16_t fps = 200;
+static int16_t min_fps = 100;
 
 
 // Prototypes prives
@@ -83,7 +85,7 @@ void SNAKE_process_main(void)
     // Déplacement automatique toutes les 200 ms
     uint32_t current_tick = HAL_GetTick();
 
-    if ((current_tick - last_move_tick) > 200)
+    if ((current_tick - last_move_tick) > fps)
     {
         last_move_tick = current_tick;
 
@@ -193,6 +195,10 @@ static void SNAKE_grow_up(void){
 		 snake.length += 1;
 		 score++;
 		 Generate_random_apple();
+
+		 if(fps >= min_fps){
+			 fps -=5;
+		 }
 	 }
 }
 
