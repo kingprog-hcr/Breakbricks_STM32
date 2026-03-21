@@ -40,11 +40,13 @@ int main(void)
 
 	//Initialisation de notre application
 
-	SNAKE_Init();
+	//SNAKE_Init();
+
 
 	while(1)	//Boucle de tâche de fond
 	{
-		SNAKE_process_main();
+		//SNAKE_process_main();
+		GAME_process();
 
 	}
 }

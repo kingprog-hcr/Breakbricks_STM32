@@ -1,42 +1,29 @@
-09:11:13 **** Incremental Build of configuration Debug for project Snake-Game ****
+21:35:50 **** Incremental Build of configuration Debug for project Snake-Game ****
 make -j14 all 
-arm-none-eabi-gcc "../app/snake.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G431xx -c -I../core/Inc -I../../common/core/Inc -I../drivers/stm32g4xx_hal/Inc -I../../common/drivers/stm32g4xx_hal/Inc -I../drivers/stm32g4xx_hal/Inc/Legacy -I../../common/drivers/stm32g4xx_hal/Inc/Legacy -I../drivers/cmsis/Device/ST/STM32G4xx/Include -I../../common/drivers/cmsis/Device/ST/STM32G4xx/Include -I../drivers/cmsis/Include -I../../common/drivers/cmsis/Include -I../app -I../drivers/bsp -I../../common/drivers/bsp -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"app/snake.d" -MT"app/snake.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "app/snake.o"
-../app/snake.c: In function 'SNAKE_game_over':
-../app/snake.c:243:9: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
-  243 |         sprintf(text, "SCORE : %s", score_str);  // concatene "SCORE : " + "1243"
-      |         ^~~~~~~
-../app/snake.c:17:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-   16 | #include "TFT_ili9341/stm32g4_ili9341.h"
-  +++ |+#include <stdio.h>
-   17 | 
-../app/snake.c:243:9: warning: incompatible implicit declaration of built-in function 'sprintf' [-Wbuiltin-declaration-mismatch]
-  243 |         sprintf(text, "SCORE : %s", score_str);  // concatene "SCORE : " + "1243"
-      |         ^~~~~~~
-../app/snake.c:243:9: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-../app/snake.c:246:24: warning: passing argument 1 of 'DISPLAY_string' from incompatible pointer type [-Wincompatible-pointer-types]
-  246 |         DISPLAY_string(&text, ILI9341_COLOR_BLACK, ILI9341_COLOR_WHITE, center_x - (strlen(text)/2) * SEG_SIZE, center_y + 2*SEG_SIZE);
-      |                        ^~~~~
-      |                        |
-      |                        char (*)[20]
-In file included from ../app/snake.c:11:
-../app/display.h:22:27: note: expected 'char *' but argument is of type 'char (*)[20]'
-   22 | void DISPLAY_string(char *text, uint16_t color_text, uint16_t color_bg, int16_t x, int16_t y);
-      |                     ~~~~~~^~~~
+arm-none-eabi-gcc "../app/display.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G431xx -c -I../core/Inc -I../../common/core/Inc -I../drivers/stm32g4xx_hal/Inc -I../../common/drivers/stm32g4xx_hal/Inc -I../drivers/stm32g4xx_hal/Inc/Legacy -I../../common/drivers/stm32g4xx_hal/Inc/Legacy -I../drivers/cmsis/Device/ST/STM32G4xx/Include -I../../common/drivers/cmsis/Device/ST/STM32G4xx/Include -I../drivers/cmsis/Include -I../../common/drivers/cmsis/Include -I../app -I../drivers/bsp -I../../common/drivers/bsp -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"app/display.d" -MT"app/display.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "app/display.o"
+../app/display.c: In function 'DISPLAY_refresh_snake':
+../app/display.c:37:17: warning: variable 'initialized' set but not used [-Wunused-but-set-variable]
+   37 |     static bool initialized = false;
+      |                 ^~~~~~~~~~~
+../app/display.c: In function 'DISPLAY_Menu':
+../app/display.c:183:42: warning: unused variable 'border_color' [-Wunused-variable]
+  183 |                                 uint16_t border_color = ILI9341_COLOR_WHITE;
+      |                                          ^~~~~~~~~~~~
 arm-none-eabi-gcc -o "Snake-Game.elf" @"objects.list"  -lc -lrdimon -mcpu=cortex-m4 -T"C:\Users\hassa\STM32CubeIDE\workspace_stm32\Snake-Game\core\STM32G431KBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Snake-Game.map" -Wl,--gc-sections -static -u_printf_float -specs=rdimon.specs --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: Snake-Game.elf
  
 arm-none-eabi-size  Snake-Game.elf 
 arm-none-eabi-objdump -h -S Snake-Game.elf  > "Snake-Game.list"
    text	   data	    bss	    dec	    hex	filename
-  51680	    492	   5124	  57296	   dfd0	Snake-Game.elf
+  53312	    496	   5152	  58960	   e650	Snake-Game.elf
 Finished building: default.size.stdout
  
 Finished building: Snake-Game.list
  
-09:11:37 **** Incremental Build of configuration Debug for project Snake-Game ****
+21:35:55 **** Incremental Build of configuration Debug for project Snake-Game ****
 make -j14 all 
 arm-none-eabi-size  Snake-Game.elf 
    text	   data	    bss	    dec	    hex	filename
-  51680	    492	   5124	  57296	   dfd0	Snake-Game.elf
+  53312	    496	   5152	  58960	   e650	Snake-Game.elf
 Finished building: default.size.stdout
  

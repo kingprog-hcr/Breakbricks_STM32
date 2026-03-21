@@ -16,11 +16,13 @@
 #define SCREEN_HEIGHT	240
 #define MAX_LENGTH 100
 #define SEG_SIZE 15  // taille d'un segment en pixels
+#define MAX_OBSTACLES 3
+
 
 
 void SNAKE_Init(void);
 void SNAKE_process_main(void);
-
+void GAME_process(void);
 
 
 typedef struct {
@@ -36,7 +38,6 @@ typedef struct { // corps du serpent
     int8_t dir_x; // direction suivant x
     int8_t dir_y; // direction suivant y
 } snake_t;
-
 
 
 
