@@ -8,8 +8,13 @@
 		<item key="caseSensitive" value="false"/>
 		<item key="searchFlags" value="227191"/>
 		<list key="previousPatterns">
+			<item value="state"/>
 			<item value="test_LED"/>
 			<item value="ILI9341_Putc"/>
 		</list>
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
+		<item key="size.width" value="640"/>
+		<item key="size.height" value="180"/>
 	</section>
 </section>

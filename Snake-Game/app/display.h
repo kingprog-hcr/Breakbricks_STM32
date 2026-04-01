@@ -20,6 +20,8 @@ void DISPLAY_string(char *text, uint16_t color_text, uint16_t color_bg, int16_t 
 
 void DISPLAY_Menu(int8_t *choice);
 void DISPLAY_draw_obstacles(segment_t *obs, uint8_t count);
+void DISPLAY_WALL(wall_t *wall);
+
 
 
 #endif /* DISPLAY_H_ */

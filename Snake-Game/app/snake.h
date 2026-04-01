@@ -40,5 +40,31 @@ typedef struct { // corps du serpent
 } snake_t;
 
 
+typedef struct {
+    int8_t bricks_count;
+    segment_t bricks[10];
+
+    int8_t dir_x;
+    int8_t dir_y;
+
+} wall_t;
+
+
+
+
+typedef enum{
+	INIT,
+	WALL_MODE,
+	BOMB_MODE,
+	NIVEAU_3,
+	INFINITE_MODE
+} state_e;
+
+typedef enum {
+	JEU,
+	PAUSE
+} game_mode_e;
+
+
 
 #endif

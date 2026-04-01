@@ -48,10 +48,7 @@ static void MAESTRO_state_machine(void)
 		//liste des états de la machine
 	}state_e;
 
-	static state_e state = INIT;
-	static state_e previous_state = INIT;
-	bool entrance = (state!=previous_state)?true:false;
-	previous_state = state;
+
 
 	button_e button_center_event, button_down_event, button_up_event;
 	BUTTONS_update(NULL, NULL, &button_up_event, &button_down_event, &button_center_event);	//A chaque passage ici, on scrute un éventuel évènement sur le bouton

@@ -1,4 +1,4 @@
-21:35:50 **** Incremental Build of configuration Debug for project Snake-Game ****
+17:07:41 **** Incremental Build of configuration Debug for project Snake-Game ****
 make -j14 all 
 arm-none-eabi-gcc "../app/display.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G431xx -c -I../core/Inc -I../../common/core/Inc -I../drivers/stm32g4xx_hal/Inc -I../../common/drivers/stm32g4xx_hal/Inc -I../drivers/stm32g4xx_hal/Inc/Legacy -I../../common/drivers/stm32g4xx_hal/Inc/Legacy -I../drivers/cmsis/Device/ST/STM32G4xx/Include -I../../common/drivers/cmsis/Device/ST/STM32G4xx/Include -I../drivers/cmsis/Include -I../../common/drivers/cmsis/Include -I../app -I../drivers/bsp -I../../common/drivers/bsp -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"app/display.d" -MT"app/display.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "app/display.o"
 ../app/display.c: In function 'DISPLAY_refresh_snake':
@@ -6,24 +6,31 @@ arm-none-eabi-gcc "../app/display.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUS
    37 |     static bool initialized = false;
       |                 ^~~~~~~~~~~
 ../app/display.c: In function 'DISPLAY_Menu':
-../app/display.c:183:42: warning: unused variable 'border_color' [-Wunused-variable]
-  183 |                                 uint16_t border_color = ILI9341_COLOR_WHITE;
+../app/display.c:186:42: warning: unused variable 'border_color' [-Wunused-variable]
+  186 |                                 uint16_t border_color = ILI9341_COLOR_WHITE;
       |                                          ^~~~~~~~~~~~
+../app/display.c: In function 'DISPLAY_refresh_bomb':
+../app/display.c:251:13: warning: unused variable 'center_yd' [-Wunused-variable]
+  251 |     int16_t center_yd = ILI9341_WIDTH - ((displayed_bomb.y1 + displayed_bomb.y2) / 2);
+      |             ^~~~~~~~~
+../app/display.c:250:13: warning: unused variable 'center_xd' [-Wunused-variable]
+  250 |     int16_t center_xd = (displayed_bomb.x1 + displayed_bomb.x2) / 2;
+      |             ^~~~~~~~~
 arm-none-eabi-gcc -o "Snake-Game.elf" @"objects.list"  -lc -lrdimon -mcpu=cortex-m4 -T"C:\Users\hassa\STM32CubeIDE\workspace_stm32\Snake-Game\core\STM32G431KBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Snake-Game.map" -Wl,--gc-sections -static -u_printf_float -specs=rdimon.specs --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: Snake-Game.elf
  
 arm-none-eabi-size  Snake-Game.elf 
 arm-none-eabi-objdump -h -S Snake-Game.elf  > "Snake-Game.list"
    text	   data	    bss	    dec	    hex	filename
-  53312	    496	   5152	  58960	   e650	Snake-Game.elf
+  55256	    508	   5612	  61376	   efc0	Snake-Game.elf
 Finished building: default.size.stdout
  
 Finished building: Snake-Game.list
  
-21:35:55 **** Incremental Build of configuration Debug for project Snake-Game ****
+17:07:47 **** Incremental Build of configuration Debug for project Snake-Game ****
 make -j14 all 
 arm-none-eabi-size  Snake-Game.elf 
    text	   data	    bss	    dec	    hex	filename
-  53312	    496	   5152	  58960	   e650	Snake-Game.elf
+  55256	    508	   5612	  61376	   efc0	Snake-Game.elf
 Finished building: default.size.stdout
  

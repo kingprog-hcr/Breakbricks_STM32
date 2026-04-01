@@ -41,7 +41,7 @@ void DISPLAY_refresh_snake(snake_t *snake)
 
 
 
-    // Effacement ancien serpent(On efface jsute l'ancien segment du serpent)
+    // Effacement ancien serpent(On efface juste l'ancien segment du serpent)
 
     int16_t x1 = displayed_snake.body[displayed_snake.length-1].x1;
     int16_t x2 = displayed_snake.body[displayed_snake.length-1].x2;
@@ -74,6 +74,7 @@ void DISPLAY_refresh_snake(snake_t *snake)
     displayed_snake = *snake;
     initialized = true;
 }
+
 void DISPLAY_refresh_apple(segment_t *apple)
 {
     int16_t center_x = (apple->x1 + apple->x2)/2;
@@ -110,6 +111,7 @@ void DISPLAY_refresh_apple(segment_t *apple)
             2,
             ILI9341_COLOR_GREEN
         );
+
 
         displayed_apple = *apple;
     }
@@ -153,6 +155,7 @@ void DISPLAY_Menu(int8_t *choice)
     int16_t y = 30; // valeur choisie de maniere arbitraire
     int16_t center_x = SCREEN_WIDTH / 2;
     static int8_t previous_choice = -1;
+
     // Titre centré
     DISPLAY_string("SNAKE GAME",
                    ILI9341_COLOR_GREEN,
@@ -161,10 +164,10 @@ void DISPLAY_Menu(int8_t *choice)
                    y);
     					// (strlen("SNAKE GAME")/2) * SEG_SIZE = 75
     char *options[4] = {
-        "Niveau 1",
-        "Niveau 2",
+        "WALL MODE",
+        "BOMB MODE",
         "Niveau 3",
-        "Infinite"
+        "BASIC"
     };
      if (previous_choice != *choice){
 
@@ -183,10 +186,10 @@ void DISPLAY_Menu(int8_t *choice)
 				uint16_t border_color = ILI9341_COLOR_WHITE;
 
 				// fond du text
-				ILI9341_DrawFilledRectangle(char_x - 15, box_y1, 230, box_y2, fill_color);
+				ILI9341_DrawFilledRectangle(90, box_y1, 235, box_y2, fill_color);
 
 				// Bordure
-				ILI9341_DrawRectangle(char_x - 15, box_y1, 230, box_y2, ILI9341_COLOR_BLACK);
+				ILI9341_DrawRectangle(90, box_y1, 235, box_y2, ILI9341_COLOR_BLACK);
 
 				// Texte centre dans la box
 				DISPLAY_string(options[i],
@@ -216,3 +219,82 @@ void DISPLAY_draw_obstacles(segment_t *obs, uint8_t count)
         );
     }
 }
+
+void DISPLAY_WALL(wall_t *wall){
+
+	for (int8_t i = 0; i < wall->bricks_count; i++)
+	    {
+	        int16_t x1 = wall->bricks[i].x1;
+	        int16_t x2 = wall->bricks[i].x2;
+	        int16_t y1 = ILI9341_WIDTH - wall->bricks[i].y1;
+	        int16_t y2 = ILI9341_WIDTH - wall->bricks[i].y2;
+
+	        //uint16_t snake_color = (i == 0) ? ILI9341_COLOR_BLUE : ILI9341_COLOR_GREEN;
+
+	        ILI9341_DrawFilledRectangle(x1, y1, x2, y2, ILI9341_COLOR_BROWN);
+	        ILI9341_DrawRectangle(x1, y1, x2, y2, ILI9341_COLOR_BLACK);
+	    }
+}
+
+
+void DISPLAY_refresh_bomb(segment_t *bomb)
+{
+    int16_t center_x = (bomb->x1 + bomb->x2) / 2;
+    int16_t center_y = ILI9341_WIDTH - ((bomb->y1 + bomb->y2) / 2);
+
+
+
+    static segment_t displayed_bomb;
+    static uint8_t spark_state = 0;
+
+    int16_t center_xd = (displayed_bomb.x1 + displayed_bomb.x2) / 2;
+    int16_t center_yd = ILI9341_WIDTH - ((displayed_bomb.y1 + displayed_bomb.y2) / 2);
+
+    if (displayed_bomb.x1 != bomb->x1 || displayed_bomb.y1 != bomb->y1){
+
+        // corps de la bombe (reste bien dans la case)
+        ILI9341_DrawFilledCircle(center_x, center_y, SEG_SIZE/2 - 1, ILI9341_COLOR_BLACK);
+        ILI9341_DrawCircle(center_x, center_y, SEG_SIZE/2 - 1, ILI9341_COLOR_GRAY);
+
+        // reflet métallique
+        ILI9341_DrawFilledCircle(
+            center_x - SEG_SIZE/4,
+            center_y - SEG_SIZE/4,
+            SEG_SIZE/8,
+            ILI9341_COLOR_WHITE
+        );
+
+        // base de la mèche
+        ILI9341_DrawFilledRectangle(
+            center_x - 1,
+            center_y - SEG_SIZE/2 + 2,
+            center_x + 1,
+            center_y - SEG_SIZE/2 + 6,
+            ILI9341_COLOR_BROWN
+        );
+
+        //ILI9341_DrawFilledCircle(center_xd, center_yd, SEG_SIZE/2 , ILI9341_COLOR_WHITE);
+
+        displayed_bomb = *bomb;
+
+
+    }
+    //étincelle animée (clignote)
+                int16_t spark_x = center_x;
+                int16_t spark_y = center_y - SEG_SIZE/2 + 6;
+
+                if(spark_state == 0)
+                {
+                    ILI9341_DrawFilledCircle(spark_x, spark_y, 2, ILI9341_COLOR_YELLOW);
+                }
+                else
+                {
+                    ILI9341_DrawFilledCircle(spark_x, spark_y, 2, ILI9341_COLOR_ORANGE);
+                }
+
+                spark_state = !spark_state;
+
+
+    }
+
+
