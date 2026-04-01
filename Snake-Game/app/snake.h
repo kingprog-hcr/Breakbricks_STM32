@@ -16,8 +16,8 @@
 #define SCREEN_HEIGHT	240
 #define MAX_LENGTH 100
 #define SEG_SIZE 15  // taille d'un segment en pixels
-#define MAX_OBSTACLES 3
-
+#define MAX_BOMBS 10
+#define MAX_WALLS 4
 
 
 void SNAKE_Init(void);
@@ -56,8 +56,8 @@ typedef enum{
 	INIT,
 	WALL_MODE,
 	BOMB_MODE,
-	NIVEAU_3,
-	INFINITE_MODE
+	VORTEX,
+	INFINITE_MODE,
 } state_e;
 
 typedef enum {

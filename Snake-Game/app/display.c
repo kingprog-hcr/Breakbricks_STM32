@@ -166,7 +166,7 @@ void DISPLAY_Menu(int8_t *choice)
     char *options[4] = {
         "WALL MODE",
         "BOMB MODE",
-        "Niveau 3",
+        "VORTEX",
         "BASIC"
     };
      if (previous_choice != *choice){
@@ -206,19 +206,6 @@ void DISPLAY_Menu(int8_t *choice)
 
 
 
-void DISPLAY_draw_obstacles(segment_t *obs, uint8_t count)
-{
-    for(uint8_t i = 0; i < count; i++)
-    {
-        ILI9341_DrawFilledRectangle(
-            obs[i].x1,
-            ILI9341_HEIGHT - obs[i].y2,
-            SEG_SIZE,
-            SEG_SIZE,
-            ILI9341_COLOR_BLUE
-        );
-    }
-}
 
 void DISPLAY_WALL(wall_t *wall){
 
@@ -236,27 +223,48 @@ void DISPLAY_WALL(wall_t *wall){
 	    }
 }
 
-
-void DISPLAY_refresh_bomb(segment_t *bomb)
+void DISPLAY_refresh_bomb(segment_t *bomb, bool active, uint8_t index)
 {
+    static segment_t displayed_bombs[MAX_BOMBS];
+    static uint8_t spark_state[MAX_BOMBS] = {0};
+    static bool initialized = false;
+
+    if (!initialized)
+    {
+        for (uint8_t i = 0; i < MAX_BOMBS; i++)
+            displayed_bombs[i].x1 = -1;
+        initialized = true;
+    }
+
+    // Bombe expirée : on efface et on reset le slot
+    if (!active)
+    {
+        if (displayed_bombs[index].x1 != -1)
+        {
+            ILI9341_DrawFilledRectangle(
+                displayed_bombs[index].x1,
+                ILI9341_WIDTH - displayed_bombs[index].y2,
+                displayed_bombs[index].x2,
+                ILI9341_WIDTH - displayed_bombs[index].y1,
+                ILI9341_COLOR_WHITE
+            );
+            displayed_bombs[index].x1 = -1;
+            displayed_bombs[index].y1 = -1;
+            spark_state[index] = 0;
+        }
+        return;
+    }
+
     int16_t center_x = (bomb->x1 + bomb->x2) / 2;
     int16_t center_y = ILI9341_WIDTH - ((bomb->y1 + bomb->y2) / 2);
 
-
-
-    static segment_t displayed_bomb;
-    static uint8_t spark_state = 0;
-
-    int16_t center_xd = (displayed_bomb.x1 + displayed_bomb.x2) / 2;
-    int16_t center_yd = ILI9341_WIDTH - ((displayed_bomb.y1 + displayed_bomb.y2) / 2);
-
-    if (displayed_bomb.x1 != bomb->x1 || displayed_bomb.y1 != bomb->y1){
-
-        // corps de la bombe (reste bien dans la case)
+    // Nouvelle bombe : on dessine le corps une seule fois
+    if (displayed_bombs[index].x1 != bomb->x1 ||
+        displayed_bombs[index].y1 != bomb->y1)
+    {
         ILI9341_DrawFilledCircle(center_x, center_y, SEG_SIZE/2 - 1, ILI9341_COLOR_BLACK);
         ILI9341_DrawCircle(center_x, center_y, SEG_SIZE/2 - 1, ILI9341_COLOR_GRAY);
 
-        // reflet métallique
         ILI9341_DrawFilledCircle(
             center_x - SEG_SIZE/4,
             center_y - SEG_SIZE/4,
@@ -264,7 +272,6 @@ void DISPLAY_refresh_bomb(segment_t *bomb)
             ILI9341_COLOR_WHITE
         );
 
-        // base de la mèche
         ILI9341_DrawFilledRectangle(
             center_x - 1,
             center_y - SEG_SIZE/2 + 2,
@@ -273,28 +280,50 @@ void DISPLAY_refresh_bomb(segment_t *bomb)
             ILI9341_COLOR_BROWN
         );
 
-        //ILI9341_DrawFilledCircle(center_xd, center_yd, SEG_SIZE/2 , ILI9341_COLOR_WHITE);
-
-        displayed_bomb = *bomb;
-
-
-    }
-    //étincelle animée (clignote)
-                int16_t spark_x = center_x;
-                int16_t spark_y = center_y - SEG_SIZE/2 + 6;
-
-                if(spark_state == 0)
-                {
-                    ILI9341_DrawFilledCircle(spark_x, spark_y, 2, ILI9341_COLOR_YELLOW);
-                }
-                else
-                {
-                    ILI9341_DrawFilledCircle(spark_x, spark_y, 2, ILI9341_COLOR_ORANGE);
-                }
-
-                spark_state = !spark_state;
-
-
+        displayed_bombs[index] = *bomb;
     }
 
+    // Étincelle animée
+    int16_t spark_x = center_x;
+    int16_t spark_y = center_y - SEG_SIZE/2 + 6;
 
+    uint16_t spark_color = (spark_state[index] == 0) ? ILI9341_COLOR_YELLOW : ILI9341_COLOR_ORANGE;
+    ILI9341_DrawFilledCircle(spark_x, spark_y, 2, spark_color);
+    spark_state[index] = !spark_state[index];
+}
+
+void DISPLAY_refresh_apple_indexed(segment_t *apple, uint8_t index)
+{
+    static segment_t displayed_apples[2]; // tableau pour 2 pommes
+
+    if (displayed_apples[index].x1 != apple->x1 ||
+        displayed_apples[index].y1 != apple->y1)
+    {
+        // Effacement ancienne position
+        int16_t old_cx = (displayed_apples[index].x1 + displayed_apples[index].x2) / 2;
+        int16_t old_cy = ILI9341_WIDTH - ((displayed_apples[index].y1 + displayed_apples[index].y2) / 2);
+        ILI9341_DrawFilledRectangle(
+            displayed_apples[index].x1,
+            ILI9341_WIDTH - displayed_apples[index].y2,
+            displayed_apples[index].x2,
+            ILI9341_WIDTH - displayed_apples[index].y1,
+            ILI9341_COLOR_WHITE
+        );
+
+        // Dessin nouvelle position
+        int16_t cx = (apple->x1 + apple->x2) / 2;
+        int16_t cy = ILI9341_WIDTH - ((apple->y1 + apple->y2) / 2);
+
+        ILI9341_DrawFilledCircle(cx, cy, SEG_SIZE/2, ILI9341_COLOR_YELLOW);
+        ILI9341_DrawCircle(cx, cy, SEG_SIZE/2, ILI9341_COLOR_BLACK);
+        ILI9341_DrawFilledCircle(cx - SEG_SIZE/4, cy - SEG_SIZE/4,
+                                  SEG_SIZE/6, ILI9341_COLOR_WHITE);
+        ILI9341_DrawFilledRectangle(cx-1, cy - SEG_SIZE/2,
+                                     cx+1, cy - SEG_SIZE/2 + 4,
+                                     ILI9341_COLOR_BROWN);
+        ILI9341_DrawFilledCircle(cx+3, cy - SEG_SIZE/2 + 2,
+                                  2, ILI9341_COLOR_GREEN);
+
+        displayed_apples[index] = *apple;
+    }
+}

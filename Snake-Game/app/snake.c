@@ -22,6 +22,7 @@
 
 static snake_t snake;
 static segment_t apple;
+static segment_t apples[2];
 static uint32_t last_move_tick = 0;
 static int16_t score = 0;
 static int16_t fps = 200;
@@ -29,16 +30,17 @@ static int16_t min_fps = 100;
 static bool paused = false;
 static bool lastButton = false;
 
+
 // Bomb mode
-#define MAX_BOMBS 10
+
 
 static segment_t bombs[MAX_BOMBS];
 static bool bomb_active[MAX_BOMBS];
 static uint32_t bomb_spawn_tick[MAX_BOMBS];
 
 static uint8_t current_bomb_count = 1;
-static uint32_t bomb_lifetime = 5000;   // 5 secondes
-static uint32_t bomb_interval = 5000;   // nouvelle bombe toutes les 5 secondes
+static uint32_t bomb_lifetime = 6000;   // 6 secondes
+static uint32_t bomb_interval = 2500;   // nouvelle bombe toutes les 2.5 secondes
 
 
 // Gestion du menu
@@ -53,19 +55,13 @@ static bool last_down = false;
 static state_e state = INIT;
 static state_e previous_state =INFINITE_MODE;
 
-
-//
-#define MAX_WALLS 4
-
+// Mode Wall
 static wall_t walls[MAX_WALLS];
 static uint8_t wall_count = 0;
 
 
 
 
-
-
-//
 // Prototypes prives
 
 // Fonctions du fonctionnement basic
@@ -86,6 +82,10 @@ static void BOMB_update(void);
 static void BOMB_check_collision(void);
 static void BOMB_update_difficulty(void);
 
+
+// Vortex
+
+static void SNAKE_vortex(void);
 
 
 // FOnction de la machine a etat
@@ -182,6 +182,7 @@ void GAME_process(void)
 
 				SNAKE_Init();
 
+
 				for(int8_t b = 0; b< wall_count; b++){
 					DISPLAY_WALL(&walls[b]);
 				}
@@ -210,17 +211,20 @@ void GAME_process(void)
 
 		break;
 
-		case NIVEAU_3:
+		case VORTEX:
 
 			if(entrance)
 			{
 
 
 				SNAKE_Init();
+				Generate_random_apple(&apples[0]);
+			    Generate_random_apple(&apples[1]);
 
 			}
 
 				    SNAKE_process_main();
+
 
 
 		break;
@@ -271,7 +275,7 @@ static void GAME_menu(void)
         {
             case 0: state = WALL_MODE; break;
             case 1: state = BOMB_MODE; break;
-            case 2: state = NIVEAU_3; break;
+            case 2: state = VORTEX; break;
             case 3: state = INFINITE_MODE; break;
         }
     }
@@ -311,7 +315,7 @@ static void MENU_update(bool up, bool down, bool center)
 			break;
 
 			case 2:
-				state = NIVEAU_3;
+				state = VORTEX;
 			break;
 
 			case 3:
@@ -404,13 +408,16 @@ void SNAKE_process_main(void)
 
         	                for(uint8_t i = 0; i < current_bomb_count; i++)
         	                {
-        	                    if(bomb_active[i])
-        	                  	{
-        	                  	  DISPLAY_refresh_bomb(&bombs[i]);
-        	                  	 }
+        	                    DISPLAY_refresh_bomb(&bombs[i], bomb_active[i], i);
         	                }
 
         	           }
+
+        	          if (state == VORTEX){
+        	        	  SNAKE_vortex();
+        	        	  DISPLAY_refresh_apple_indexed(&apples[0], 0);
+        	        	  DISPLAY_refresh_apple_indexed(&apples[1], 1);
+        	          }
 
 
         	          // Rafraîchissement affichage
@@ -540,6 +547,20 @@ static void Generate_random_apple(segment_t *obj)
                obj->y1 == apple.y1)
             {
                 valid = false;
+            }
+        }
+
+        // Vérifier les pommes vortex
+        for(uint8_t a = 0; a < 2; a++)
+        {
+            if(obj != &apples[a])  // on ne se compare pas à soi-même
+            {
+                if(obj->x1 == apples[a].x1 &&
+                   obj->y1 == apples[a].y1)
+                {
+                    valid = false;
+                    break;
+                }
             }
         }
 
@@ -702,5 +723,41 @@ static void BOMB_update_difficulty(void)
     else if(score < 25) current_bomb_count = 6;
     else current_bomb_count = 8;
 }
+
+
+
+static void SNAKE_vortex(void){
+		if (snake.body[0].x1 == apples[0].x1 && snake.body[0].y1 == apples[0].y1){
+
+			//
+			snake.body[0].x1 = apples[1].x1;
+			snake.body[0].y1 = apples[1].y1;
+			snake.body[0].x2 = apples[1].x1 + SEG_SIZE - 1;
+			snake.body[0].y2 = apples[1].y1 + SEG_SIZE - 1;
+
+		    Generate_random_apple(&apples[0]);
+		    Generate_random_apple(&apples[1]);
+
+		    snake.length++;
+		    score++;
+
+		}
+
+		else if(snake.body[0].x1 == apples[1].x1 && snake.body[0].y1 == apples[1].y1){
+			//
+			snake.body[0].x1 = apples[0].x1;
+			snake.body[0].y1 = apples[0].y1;
+			snake.body[0].x2 = apples[0].x1 + SEG_SIZE - 1;
+			snake.body[0].y2 = apples[0].y1 + SEG_SIZE - 1;
+
+			Generate_random_apple(&apples[0]);
+		    Generate_random_apple(&apples[1]);
+
+		    snake.length++;
+		    score++;
+	}
+}
+
+
 
 
