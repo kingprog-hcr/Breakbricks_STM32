@@ -8,6 +8,9 @@
 		<item key="caseSensitive" value="false"/>
 		<item key="searchFlags" value="227191"/>
 		<list key="previousPatterns">
+			<item value="NIVEAU_3"/>
+			<item value="DISPLAY_draw_obstacles"/>
+			<item value="obstacle"/>
 			<item value="state"/>
 			<item value="test_LED"/>
 			<item value="ILI9341_Putc"/>

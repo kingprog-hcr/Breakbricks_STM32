@@ -15,12 +15,14 @@
 
 //Constantes privées
 
+// En haut de display.c avec les autres variables statiques
+static segment_t displayed_apples[2] = {{-1,-1,-1,-1},{-1,-1,-1,-1}};
 
 //Prototype des fonctions privées
 
 
 
-//_____________________________________
+//
 
 //Fonctions publiques
 
@@ -294,7 +296,7 @@ void DISPLAY_refresh_bomb(segment_t *bomb, bool active, uint8_t index)
 
 void DISPLAY_refresh_apple_indexed(segment_t *apple, uint8_t index)
 {
-    static segment_t displayed_apples[2]; // tableau pour 2 pommes
+    //static segment_t displayed_apples[2]; // tableau pour 2 pommes
 
     if (displayed_apples[index].x1 != apple->x1 ||
         displayed_apples[index].y1 != apple->y1)
@@ -327,3 +329,4 @@ void DISPLAY_refresh_apple_indexed(segment_t *apple, uint8_t index)
         displayed_apples[index] = *apple;
     }
 }
+
