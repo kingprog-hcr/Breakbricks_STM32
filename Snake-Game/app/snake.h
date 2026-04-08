@@ -2,7 +2,7 @@
  * snake.h
  *
  *  Created on: Feb 02, 2026
- *      Author: Chrys-Renabell HASSAM
+ *      Author: Chrys-Renabell HASSAM & BRIAN DIVINE
  */
 
 #ifndef SNAKE_H
